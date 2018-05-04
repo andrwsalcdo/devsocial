@@ -199,6 +199,27 @@ router.post(
 );
 
 /*
+    @route  DELETE api/profile/experience/:exp_id
+    @desc   Delete education from profile
+    @access Private
+*/
+router.delete(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        profile.experience.remove({ _id: req.params.exp_id });
+        profile
+          .save()
+          .then(profile => res.json(profile))
+          .catch(err => res.json(err));
+      })
+      .catch(err => res.json(err));
+  }
+);
+
+/*
     @route  POST api/profile/education
     @desc   Add education to profile
     @access Private
