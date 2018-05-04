@@ -48,7 +48,7 @@ router.get("/all", (req, res) => {
   Profile.find()
     .populate("user", ["name", "avatar"])
     .then(profiles => {
-      if (!profiles) {
+      if (!profiles || profiles.length === 0) {
         errors.noprofile = "There aren't any profiles";
         return res.status(404).json(errors);
       }
@@ -72,7 +72,7 @@ router.get("/handle/:handle", (req, res) => {
     .then(profile => {
       if (!profile) {
         errors.noprofile = "There isn't a profile for this user";
-        res.status(404).json(errors);
+        return res.status(404).json(errors);
       }
       res.json(profile);
     })
@@ -92,7 +92,7 @@ router.get("/user/:user_id", (req, res) => {
     .then(profile => {
       if (!profile) {
         errors.noprofile = "There isn't a profile for this user";
-        res.status(404).json(errors);
+        return res.status(404).json(errors);
       }
       res.json(profile);
     })
