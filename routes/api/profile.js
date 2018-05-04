@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
+const validateProfileInput = require("../../validation/profile");
 
 /*
     @route  GET api/profile/test
@@ -24,6 +25,7 @@ router.get(
     let errors = {};
 
     Profile.findOne({ user: req.user.id })
+      .populate("user", ["name", "avatar"])
       .then(profile => {
         if (!profile) {
           errors.noprofile = "This user does not have a profile";
