@@ -200,7 +200,7 @@ router.post(
 
 /*
     @route  DELETE api/profile/experience/:exp_id
-    @desc   Delete education from profile
+    @desc   Delete experience from profile
     @access Private
 */
 router.delete(
@@ -250,6 +250,27 @@ router.post(
 
       profile.save().then(profile => res.json(profile));
     });
+  }
+);
+
+/*
+    @route  DELETE api/profile/education/:edu_id
+    @desc   Delete education from profile
+    @access Private
+*/
+router.delete(
+  "/education/:edu_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        profile.education.remove({ _id: req.params.edu_id });
+        profile
+          .save()
+          .then(profile => res.json(profile))
+          .catch(err => res.json(err));
+      })
+      .catch(err => res.json(err));
   }
 );
 
