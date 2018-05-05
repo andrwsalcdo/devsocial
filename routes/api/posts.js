@@ -131,6 +131,7 @@ router.post(
             }
             //  add user to likes array
             post.likes = [{ user: req.user.id }].concat(post.likes);
+            //  save
             post
               .save()
               .then(post => res.json(post))
@@ -138,6 +139,49 @@ router.post(
                 res
                   .status(404)
                   .json({ post: "There was a problem liking this post" })
+              );
+          })
+          .catch(err => res.status(404).json({ post: "No post was found" }));
+      })
+      .catch(err =>
+        res.status(404).json({ profile: "Could not find profile" })
+      );
+  }
+);
+
+/*
+    @route  POST api/posts/unlike/:id
+    @desc   Unlike post
+    @access Private
+*/
+router.post(
+  "/unlike/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        Post.findById(req.params.id)
+          .then(post => {
+            if (
+              post.likes.filter(like => like.user.toString() === req.user.id)
+                .length === 0
+            ) {
+              return res
+                .status(400)
+                .json({ alreadyLiked: "User has not liked this post yet" });
+            }
+            // remove like
+            post.likes = post.likes.filter(
+              like => like.user.toString() !== req.user.id
+            );
+            // save
+            post
+              .save()
+              .then(post => res.json(post))
+              .catch(err =>
+                res
+                  .status(404)
+                  .json({ post: "There was a problem unliking this post" })
               );
           })
           .catch(err => res.status(404).json({ post: "No post was found" }));
