@@ -150,11 +150,11 @@ router.post(
 );
 
 /*
-    @route  POST api/posts/unlike/:id
-    @desc   Unlike post
+    @route  DELETE api/posts/unlike/:id
+    @desc   Unlike post || delete like from post
     @access Private
 */
-router.post(
+router.delete(
   "/unlike/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
@@ -189,6 +189,73 @@ router.post(
       .catch(err =>
         res.status(404).json({ profile: "Could not find profile" })
       );
+  }
+);
+
+/*
+    @route  POST api/posts/comment/:id
+    @desc   Add comment to post
+    @access Private
+*/
+router.post(
+  "/comment/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = ValidatePostInput(req.body);
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+    Post.findById(req.params.id)
+      .then(post => {
+        const newComment = {
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          user: req.user.id
+        };
+
+        // add to comments array
+        post.comments = [newComment].concat(post.comments);
+        post
+          .save()
+          .then(post => res.json(post))
+          .catch(err => res.json(err));
+      })
+      .catch(err => res.status(404).json({ post: "Post not found" }));
+  }
+);
+
+/*
+    @route  DELETE api/posts/comment/:id/:comment_id
+    @desc   Remove Comment from Post
+    @access Private
+*/
+router.delete(
+  "/comment/:id/:comment_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        if (
+          post.comments.filter(
+            comment => comment._id.toString() === req.params.comment_id
+          ).length === 0
+        ) {
+          return res.status(400).json({
+            comment: "Comment does not exist"
+          });
+        }
+        // remove comment
+        post.comments = post.comments.filter(
+          comment => comment._id.toString() !== req.params.comment_id
+        );
+        // save
+        post
+          .save()
+          .then(post => res.json(post))
+          .catch(err => res.json(err));
+      })
+      .catch(err => res.status(404).json({ post: "No post was found" }));
   }
 );
 
