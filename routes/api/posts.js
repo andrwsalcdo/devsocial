@@ -13,6 +13,37 @@ const ValidatePostInput = require("../../validation/post");
 router.get("/test", (req, res) => res.json({ msg: "posts test route" }));
 
 /*
+    @route  GET api/posts
+    @desc   Get all posts
+    @access Public
+*/
+router.get("/", (req, res) => {
+  Post.find()
+    .sort({ date: -1 })
+    .then(posts => {
+      if (!posts || posts.length === 0) {
+        errors.nopost = "There aren't any posts";
+        return res.status(404).json(errors);
+      }
+      res.json(posts);
+    })
+    .catch(err => res.status(404).json({ post: "There aren't any posts" }));
+});
+
+/*
+    @route  GET api/posts/:id
+    @desc   Get post by id
+    @access Public
+*/
+router.get("/:id", (req, res) => {
+  Post.findById(req.params.id)
+    .then(post => res.json(post))
+    .catch(err =>
+      res.status(404).json({ post: "No post with that id was found" })
+    );
+});
+
+/*
     @route  POST api/posts
     @desc   Create post
     @access Private
