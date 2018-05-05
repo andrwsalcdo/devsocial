@@ -191,7 +191,7 @@ router.post(
       };
 
       // add to front of experience array
-      profile.experience.unshift(newExp);
+      profile.experience = [newExp].concat(profile.experience);
 
       profile.save().then(profile => res.json(profile));
     });
@@ -246,7 +246,7 @@ router.post(
       };
 
       // add to front of education array
-      profile.education.unshift(newEdu);
+      profile.education = [newEdu].concat(profile.education);
 
       profile.save().then(profile => res.json(profile));
     });
