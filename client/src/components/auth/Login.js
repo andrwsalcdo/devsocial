@@ -9,6 +9,7 @@ class Login extends Component {
   static propTypes = {
     loginUser: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
   };
 
@@ -17,6 +18,12 @@ class Login extends Component {
     password: "",
     errors: {}
   };
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
 
   static getDerivedStateFromProps = nextProps => {
     if (nextProps.auth.isAuthenticated) {

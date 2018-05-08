@@ -9,6 +9,7 @@ class Register extends Component {
   static propTypes = {
     registerUser: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
   };
 
@@ -19,6 +20,12 @@ class Register extends Component {
     password2: "",
     errors: {}
   };
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
 
   static getDerivedStateFromProps = nextProps => {
     if (nextProps.errors) {
@@ -100,6 +107,7 @@ class Register extends Component {
 }
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   errors: state.errors
 });
 
