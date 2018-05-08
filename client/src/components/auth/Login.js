@@ -1,12 +1,32 @@
 import React, { Component } from "react";
-import axios from "axios";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { loginUser } from "../../redux/actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
 
 class Login extends Component {
+  static propTypes = {
+    loginUser: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+  };
+
   state = {
     email: "",
     password: "",
     errors: {}
+  };
+
+  static getDerivedStateFromProps = nextProps => {
+    if (nextProps.auth.isAuthenticated) {
+      nextProps.history.push("/dashboard");
+    }
+    if (nextProps.errors) {
+      return {
+        errors: nextProps.errors
+      };
+    }
   };
 
   onChange = e => {
@@ -20,10 +40,8 @@ class Login extends Component {
       email,
       password
     };
-    axios
-      .post("/api/users/login", user)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({ errors: err.response.data }));
+    // call redux action
+    this.props.loginUser(user);
   };
 
   render() {
@@ -66,4 +84,9 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { loginUser })(withRouter(Login));
