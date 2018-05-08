@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { registerUser } from "../../redux/actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
 
 class Register extends Component {
@@ -24,10 +26,8 @@ class Register extends Component {
       password,
       password2
     };
-    axios
-      .post("/api/users/register", newUser)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({ errors: err.response.data }));
+    // call redux action
+    this.props.registerUser(newUser, this.props.history);
   };
 
   render() {
@@ -84,4 +84,8 @@ class Register extends Component {
   }
 }
 
-export default Register;
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));
