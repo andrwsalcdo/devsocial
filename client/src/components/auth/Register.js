@@ -1,16 +1,31 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "../../redux/actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
 
 class Register extends Component {
+  static propTypes = {
+    registerUser: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+  };
+
   state = {
     name: "",
     email: "",
     password: "",
     password2: "",
     errors: {}
+  };
+
+  static getDerivedStateFromProps = nextProps => {
+    if (nextProps.errors) {
+      return {
+        errors: nextProps.errors
+      };
+    }
   };
 
   onChange = e => {
