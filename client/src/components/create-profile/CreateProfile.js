@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { createProfile } from "../../redux/actions/profileActions";
 import selectOptions from "../../utils/selectOptions";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
@@ -9,6 +11,8 @@ import InputIconGroup from "../common/InputIconGroup";
 
 class CreateProfile extends Component {
   static propTypes = {
+    createProfile: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
   };
@@ -31,6 +35,14 @@ class CreateProfile extends Component {
     errors: {}
   };
 
+  static getDerivedStateFromProps = nextProps => {
+    if (nextProps.errors) {
+      return {
+        errors: nextProps.errors
+      };
+    }
+  };
+
   onSubmit = e => {
     e.preventDefault();
     const profileData = {
@@ -49,8 +61,8 @@ class CreateProfile extends Component {
       instagram: this.state.instagram
     };
 
-    console.log(profileData);
-    // todo: call redux action
+    // call redux action
+    this.props.createProfile(profileData, this.props.history);
   };
 
   onChange = e => {
@@ -87,7 +99,7 @@ class CreateProfile extends Component {
                 />
                 <SelectListGroup
                   placeholder="Status"
-                  name="Status"
+                  name="status"
                   value={this.state.status}
                   onChange={this.onChange}
                   // selectOptions imported
@@ -221,5 +233,7 @@ const mapStateToProps = state => ({
   profile: state.profile,
   errors: state.errors
 });
-// add redux action
-export default connect(mapStateToProps)(CreateProfile);
+
+export default connect(mapStateToProps, { createProfile })(
+  withRouter(CreateProfile)
+);
