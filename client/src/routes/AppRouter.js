@@ -1,5 +1,7 @@
 import React from "react";
 import { Route } from "react-router-dom";
+import PrivateRoute from "./PrivateRoute";
+
 import Navbar from "../components/layout/Navbar";
 import Landing from "../components/layout/Landing";
 import Footer from "../components/layout/Footer";
@@ -16,7 +18,7 @@ const AppRouter = () => (
     <div className="container">
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
-      <Route exact path="/dashboard" component={Dashboard} />
+      <PrivateRoute exact path="/dashboard" component={Dashboard} />
     </div>
     <Footer />
   </React.Fragment>
