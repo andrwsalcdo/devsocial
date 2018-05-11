@@ -5,8 +5,10 @@ import {
   PROFILE_LOADING,
   //   PROFILE_NOT_FOUND,
   CLEAR_CURRENT_PROFILE
+  // SET_CURRENT_USER
 } from "./actionTypes";
 import { getErrors } from "./errorsActions";
+import { setCurrentUser } from "./authActions";
 
 // get current profile
 export const getCurrentProfile = () => dispatch => {
@@ -40,3 +42,13 @@ export const getProfile = profileData => ({
 export const clearCurrentProfile = () => ({
   type: CLEAR_CURRENT_PROFILE
 });
+
+// Delete profile & user
+export const deleteAccount = () => dispatch => {
+  if (window.confirm("Are you sure you want to delete your profile")) {
+    axios
+      .delete("/api/profile")
+      .then(res => dispatch(setCurrentUser({})))
+      .catch(err => dispatch(getErrors(err)));
+  }
+};
