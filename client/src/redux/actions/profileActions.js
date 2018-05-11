@@ -43,16 +43,6 @@ export const clearCurrentProfile = () => ({
   type: CLEAR_CURRENT_PROFILE
 });
 
-// Delete profile & user
-export const deleteAccount = () => dispatch => {
-  if (window.confirm("Are you sure you want to delete your profile")) {
-    axios
-      .delete("/api/profile")
-      .then(res => dispatch(setCurrentUser({})))
-      .catch(err => dispatch(getErrors(err)));
-  }
-};
-
 // add Experience
 export const addExperience = (experienceData, history) => dispatch => {
   axios
@@ -67,4 +57,21 @@ export const addEducation = (educationData, history) => dispatch => {
     .post("/api/profile/education", educationData)
     .then(res => history.push("/dashboard"))
     .catch(err => dispatch(getErrors(err)));
+};
+
+export const deleteExperience = id => dispatch => {
+  axios
+    .delete(`/api/profile/experience/${id}`)
+    .then(res => dispatch(getProfile(res.data)))
+    .catch(err => dispatch(getErrors(err)));
+};
+
+// Delete profile & user
+export const deleteAccount = () => dispatch => {
+  if (window.confirm("Are you sure you want to delete your profile")) {
+    axios
+      .delete("/api/profile")
+      .then(res => dispatch(setCurrentUser({})))
+      .catch(err => dispatch(getErrors(err)));
+  }
 };
