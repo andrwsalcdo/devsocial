@@ -10,6 +10,7 @@ import Register from "../components/auth/Register";
 import Login from "../components/auth/Login";
 import Dashboard from "../components/dashboard/Dashboard";
 import CreateEditProfile from "../components/profile/CreateEditProfile";
+import addExperience from "../components/add-credentials/addExperience";
 
 import "../App.css";
 
@@ -32,6 +33,11 @@ const AppRouter = () => (
             exact
             path="/edit-profile"
             component={CreateEditProfile}
+          />
+          <PrivateRoute
+            exact
+            path="/add-experience"
+            component={addExperience}
           />
         </Switch>
       </div>
