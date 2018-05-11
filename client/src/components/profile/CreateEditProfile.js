@@ -41,7 +41,10 @@ class CreateEditProfile extends Component {
       return { errors: nextProps.errors };
     }
 
-    if (nextProps.profile.profile) {
+    if (
+      nextProps.profile.profile &&
+      nextProps.history.location.pathname !== "/create-profile"
+    ) {
       const { profile } = nextProps.profile;
       // if profile exists then update the form fields (state)
       // with current profile's data

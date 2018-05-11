@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { CreateProfileHeader, EditProfileHeader } from "./ProfileHeaders";
 import selectOptions from "../../utils/selectOptions";
 import TextFieldGroup from "../common/TextFieldGroup";
@@ -36,6 +37,9 @@ const ProfileForm = ({
       <div className="container">
         <div className="row">
           <div className="col-md-8 m-auto">
+            <Link to="/dashboard" className="btn btn-light">
+              Go Back
+            </Link>
             {props.match.path === "/create-profile" ? (
               <CreateProfileHeader />
             ) : (
