@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import isEmpty from "../../utils/isEmpty";
 import {
   createProfile,
   getCurrentProfile
 } from "../../redux/actions/profileActions";
+import updateForm from "../../utils/updateFormWithProfile";
 import ProfileForm from "./ProfileForm";
 
 class CreateEditProfile extends Component {
@@ -16,61 +16,6 @@ class CreateEditProfile extends Component {
     history: PropTypes.object.isRequired,
     profile: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
-  };
-
-  static getDerivedStateFromProps = nextProps => {
-    if (nextProps.errors) {
-      return { errors: nextProps.errors };
-    }
-
-    // Fill state fields with values
-    const { profile } = nextProps.profile;
-    if (profile) {
-      // Bring skills array back to CSV
-      const skillsCSV = profile.skills.join(",");
-
-      // If profile field doesnt exist, make empty string
-      profile.company = !isEmpty(profile.company) ? profile.company : "";
-      profile.website = !isEmpty(profile.website) ? profile.website : "";
-      profile.location = !isEmpty(profile.location) ? profile.location : "";
-      profile.githubusername = !isEmpty(profile.githubusername)
-        ? profile.githubusername
-        : "";
-      profile.bio = !isEmpty(profile.bio) ? profile.bio : "";
-      profile.social = !isEmpty(profile.social) ? profile.social : {};
-      profile.twitter = !isEmpty(profile.social.twitter)
-        ? profile.social.twitter
-        : "";
-      profile.facebook = !isEmpty(profile.social.facebook)
-        ? profile.social.facebook
-        : "";
-      profile.linkedin = !isEmpty(profile.social.linkedin)
-        ? profile.social.linkedin
-        : "";
-      profile.youtube = !isEmpty(profile.social.youtube)
-        ? profile.social.youtube
-        : "";
-      profile.instagram = !isEmpty(profile.social.instagram)
-        ? profile.social.instagram
-        : "";
-
-      // Set component fields state
-      return {
-        handle: profile.handle,
-        company: profile.company,
-        website: profile.website,
-        location: profile.location,
-        status: profile.status,
-        skills: skillsCSV,
-        githubusername: profile.githubusername,
-        bio: profile.bio,
-        twitter: profile.twitter,
-        facebook: profile.facebook,
-        linkedin: profile.linkedin,
-        youtube: profile.youtube,
-        instagram: profile.instagram
-      };
-    }
   };
 
   state = {
@@ -89,6 +34,21 @@ class CreateEditProfile extends Component {
     youtube: "",
     instagram: "",
     errors: {}
+  };
+
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (prevState.errors !== nextProps.errors) {
+      return { errors: nextProps.errors };
+    }
+
+    if (nextProps.profile.profile) {
+      const { profile } = nextProps.profile;
+      // if profile exists then update the form fields (state)
+      // with current profile's data
+      return updateForm(profile);
+    }
+
+    return null;
   };
 
   componentDidMount() {
