@@ -9,7 +9,7 @@ import Footer from "../components/layout/Footer";
 import Register from "../components/auth/Register";
 import Login from "../components/auth/Login";
 import Dashboard from "../components/dashboard/Dashboard";
-import CreateEditProfile from "../components/profile/CreateEditProfile";
+import CreateEditProfile from "../components/create-edit-profile/CreateEditProfile";
 import AddExperience from "../components/add-credentials/AddExperience";
 import AddEducation from "../components/add-credentials/AddEducation";
 
