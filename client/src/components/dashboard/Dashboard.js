@@ -8,6 +8,7 @@ import {
 } from "../../redux/actions/profileActions";
 import Spinner from "../common/spinner/Spinner";
 import ProfileEdits from "./ProfileEdits";
+import Table from "./Table";
 
 class Dashboard extends Component {
   static propTypes = {
@@ -44,9 +45,22 @@ class Dashboard extends Component {
                     <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
                   </p>
                   <ProfileEdits />
-                  {/* todo add these components */}
-                  {/* <Experience experience={profile.experience} /> */}
-                  {/* <Education education={profile.education} /> */}
+                  {profile.experience.length > 0 && (
+                    <Table
+                      header="Experience Credentials"
+                      th1="Company"
+                      th2="Title"
+                      data={profile.experience}
+                    />
+                  )}
+                  {profile.education.length > 0 && (
+                    <Table
+                      header="Education Credentials"
+                      th1="School"
+                      th2="Degree"
+                      data={profile.education}
+                    />
+                  )}
                   <button
                     onClick={this.handleDeleteAccount}
                     className="btn btn-danger"
