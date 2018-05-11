@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { CreateProfileHeader, EditProfileHeader } from "./ProfileHeaders";
 import selectOptions from "../../utils/selectOptions";
 import TextFieldGroup from "../common/TextFieldGroup";
@@ -179,6 +180,30 @@ const ProfileForm = ({
       </div>
     </div>
   );
+};
+
+ProfileForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  toggleSocialInputs: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
+  state: PropTypes.shape({
+    displaySocialInputs: PropTypes.bool,
+    handle: PropTypes.string,
+    company: PropTypes.string,
+    website: PropTypes.string,
+    location: PropTypes.string,
+    status: PropTypes.string,
+    skills: PropTypes.string,
+    githubusername: PropTypes.string,
+    bio: PropTypes.string,
+    twitter: PropTypes.string,
+    facebook: PropTypes.string,
+    linkedin: PropTypes.string,
+    youtube: PropTypes.string,
+    instagram: PropTypes.string,
+    errors: PropTypes.object
+  }).isRequired
 };
 
 export default ProfileForm;
