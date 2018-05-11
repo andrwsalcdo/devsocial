@@ -60,3 +60,11 @@ export const addExperience = (experienceData, history) => dispatch => {
     .then(res => history.push("/dashboard"))
     .catch(err => dispatch(getErrors(err)));
 };
+
+// add Experience
+export const addEducation = (educationData, history) => dispatch => {
+  axios
+    .post("/api/profile/education", educationData)
+    .then(res => history.push("/dashboard"))
+    .catch(err => dispatch(getErrors(err)));
+};
