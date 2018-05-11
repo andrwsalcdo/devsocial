@@ -274,18 +274,18 @@ router.delete(
   }
 );
 
-/*
-    @route  DELETE api/profile/:profile_id
-    @desc   Delete profile by profile's id
-    @access Private
-*/
+// @route   DELETE api/profile
+// @desc    Delete user and profile, i.e. delete account
+// @access  Private
 router.delete(
-  "/:profile_id",
+  "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Profile.findByIdAndRemove({ _id: req.params.profile_id })
-      .then(profile => {
-        res.json({ success: true });
+    Profile.findOneAndRemove({ user: req.user.id })
+      .then(() => {
+        User.findOneAndRemove({ _id: req.user.id }).then(() =>
+          res.json({ success: true })
+        );
       })
       .catch(err => res.json(err));
   }
