@@ -19,21 +19,16 @@ class Login extends Component {
     errors: {}
   };
 
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
-    }
-  }
-
-  static getDerivedStateFromProps = nextProps => {
+  static getDerivedStateFromProps = (nextProps, prevState) => {
     if (nextProps.auth.isAuthenticated) {
       nextProps.history.push("/dashboard");
     }
-    if (nextProps.errors) {
+    if (prevState.errors !== nextProps.errors) {
       return {
         errors: nextProps.errors
       };
     }
+    return null;
   };
 
   onChange = e => {

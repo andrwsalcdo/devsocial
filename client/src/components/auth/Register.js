@@ -27,12 +27,13 @@ class Register extends Component {
     }
   }
 
-  static getDerivedStateFromProps = nextProps => {
-    if (nextProps.errors) {
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    if (prevState.errors !== nextProps.errors) {
       return {
         errors: nextProps.errors
       };
     }
+    return null;
   };
 
   onChange = e => {
