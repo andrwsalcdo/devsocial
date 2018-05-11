@@ -9,7 +9,7 @@ import Footer from "../components/layout/Footer";
 import Register from "../components/auth/Register";
 import Login from "../components/auth/Login";
 import Dashboard from "../components/dashboard/Dashboard";
-import CreateProfile from "../components/create-profile/CreateProfile";
+import CreateEditProfile from "../components/profile/CreateEditProfile";
 
 import "../App.css";
 
@@ -26,7 +26,12 @@ const AppRouter = () => (
           <PrivateRoute
             exact
             path="/create-profile"
-            component={CreateProfile}
+            component={CreateEditProfile}
+          />
+          <PrivateRoute
+            exact
+            path="/edit-profile"
+            component={CreateEditProfile}
           />
         </Switch>
       </div>
