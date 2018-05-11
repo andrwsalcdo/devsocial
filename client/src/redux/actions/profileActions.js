@@ -58,10 +58,18 @@ export const addEducation = (educationData, history) => dispatch => {
     .then(res => history.push("/dashboard"))
     .catch(err => dispatch(getErrors(err)));
 };
-
+// delete experience
 export const deleteExperience = id => dispatch => {
   axios
     .delete(`/api/profile/experience/${id}`)
+    .then(res => dispatch(getProfile(res.data)))
+    .catch(err => dispatch(getErrors(err)));
+};
+
+// delete education
+export const deleteEducation = id => dispatch => {
+  axios
+    .delete(`/api/profile/education/${id}`)
     .then(res => dispatch(getProfile(res.data)))
     .catch(err => dispatch(getErrors(err)));
 };
