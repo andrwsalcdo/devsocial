@@ -6,7 +6,7 @@ import {
   createProfile,
   getCurrentProfile
 } from "../../redux/actions/profileActions";
-import updateForm from "../../utils/updateFormWithProfile";
+import { updateProfileForm } from "../../utils/updateFormState";
 import ProfileForm from "./ProfileForm";
 
 class CreateEditProfile extends Component {
@@ -48,7 +48,7 @@ class CreateEditProfile extends Component {
       const { profile } = nextProps.profile;
       // if profile exists then update the form fields (state)
       // with current profile's data
-      return updateForm(profile);
+      return updateProfileForm(profile);
     }
 
     return null;
