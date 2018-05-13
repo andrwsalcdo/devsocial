@@ -1,6 +1,7 @@
 import isEmpty from "./isEmpty";
+import moment from "moment";
 
-const updateForm = profileData => {
+export const updateProfileForm = profileData => {
   // Bring skills array back to CSV
   const skillsCSV = profileData.skills.join(",");
 
@@ -53,4 +54,32 @@ const updateForm = profileData => {
   };
 };
 
-export default updateForm;
+export const updateExpForm = (experience, id) => {
+  // find the experience in the array via id
+  const [exp] = experience.filter(ex => ex._id === id);
+
+  // if (exp.length > 0 || exp !== undefined) {
+  const from = moment(exp.from, ["yyyy-MM-dd", moment.HTML5_FMT.DATE]);
+  const to = moment(exp.to, ["yyyy-MM-dd", moment.HTML5_FMT.DATE]);
+
+  // // if experinece form field doesn't exists, use empty string
+  exp.location = !isEmpty(exp.location) ? exp.location : "";
+  exp.from = !isEmpty(exp.from) ? from._d.toDateString() : "";
+  exp.to = !isEmpty(exp.to) ? to._d.toDateString() : "";
+  exp.current = exp.current === true ? exp.current : (exp.current = false);
+  exp.description = !isEmpty(exp.description) ? exp.description : "";
+
+  return {
+    company: exp.company,
+    title: exp.title,
+    location: exp.location,
+    from: exp.from,
+    to: exp.to,
+    current: exp.current,
+    description: exp.description,
+    // hack: having problems with moment. this helps the user
+    // with the dates, just in case they forget.
+    originalFrom: exp.from,
+    originalTo: exp.to
+  };
+};
