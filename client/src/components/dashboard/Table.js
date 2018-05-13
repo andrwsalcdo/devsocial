@@ -6,6 +6,7 @@ import {
   deleteExperience,
   deleteEducation
 } from "../../redux/actions/profileActions";
+import { Link } from "react-router-dom";
 
 const Table = ({
   header,
@@ -13,13 +14,17 @@ const Table = ({
   th2,
   data,
   deleteExperience,
-  deleteEducation
+  deleteEducation,
+  experience = false,
+  education = false
 }) => {
   const deleteRow = id => {
-    // if true, then data = experience array
-    header === "Experience Credentials"
-      ? deleteExperience(id)
-      : deleteEducation(id);
+    if (experience) {
+      deleteExperience(id);
+    }
+    if (education) {
+      deleteEducation(id);
+    }
   };
   return (
     <div>
@@ -35,11 +40,21 @@ const Table = ({
         <tbody>
           {data.map(d => (
             <tr key={d._id}>
-              <td>{d.company ? d.company : d.school}</td>
-              <td>{d.title ? d.title : d.degree}</td>
+              {experience && (
+                <React.Fragment>
+                  <td>{d.company}</td>
+                  <td>{d.title}</td>
+                </React.Fragment>
+              )}
+              {education && (
+                <React.Fragment>
+                  <td>{d.school}</td>
+                  <td>{d.degree}</td>
+                </React.Fragment>
+              )}
               <td>
                 <Moment format="YYYY/MM/DD">{d.from}</Moment> -
-                {d.to === null ? (
+                {d.current ? (
                   " Current"
                 ) : (
                   <Moment format="YYYY/MM/DD">{d.to}</Moment>
@@ -52,6 +67,17 @@ const Table = ({
                 >
                   Delete
                 </button>
+              </td>
+              <td>
+                <Link
+                  className="btn btn-info"
+                  to={
+                    (experience && `/experience/${d._id}`) ||
+                    (education && `education/${d._id}`)
+                  }
+                >
+                  Edit
+                </Link>
               </td>
             </tr>
           ))}
@@ -67,7 +93,12 @@ Table.propTypes = {
   header: PropTypes.string.isRequired,
   th1: PropTypes.string.isRequired,
   th2: PropTypes.string.isRequired,
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
+  experience: PropTypes.bool,
+  education: PropTypes.bool
 };
 
-export default connect(null, { deleteExperience, deleteEducation })(Table);
+export default connect(null, {
+  deleteExperience,
+  deleteEducation
+})(Table);

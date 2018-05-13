@@ -51,6 +51,7 @@ class Dashboard extends Component {
                       th1="Company"
                       th2="Title"
                       data={profile.experience}
+                      experience={true}
                     />
                   )}
                   {profile.education.length > 0 && (
@@ -59,6 +60,7 @@ class Dashboard extends Component {
                       th1="School"
                       th2="Degree"
                       data={profile.education}
+                      education={true}
                     />
                   )}
                   <button
