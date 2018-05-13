@@ -199,6 +199,45 @@ router.post(
 );
 
 /*
+    @route  PATCH api/profile/experience/:exp_id
+    @desc   Edit experience in Profile
+    @access Private
+*/
+router.patch(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateExperienceInput(req.body);
+    //  check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        const expId = req.params.exp_id;
+        const updateExp = {
+          _id: req.params.exp_id,
+          title: req.body.title,
+          company: req.body.company,
+          location: req.body.location,
+          from: req.body.from,
+          to: req.body.to,
+          current: req.body.current,
+          description: req.body.description
+        };
+        // get the experience by index
+        const expIndex = profile.experience.map(exp => exp.id).indexOf(expId);
+
+        profile.experience[expIndex] = updateExp;
+
+        profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.json({ error: "There was an error" }));
+  }
+);
+
+/*
     @route  DELETE api/profile/experience/:exp_id
     @desc   Delete experience from profile
     @access Private
@@ -210,10 +249,7 @@ router.delete(
     Profile.findOne({ user: req.user.id })
       .then(profile => {
         profile.experience.remove({ _id: req.params.exp_id });
-        profile
-          .save()
-          .then(profile => res.json(profile))
-          .catch(err => res.json(err));
+        profile.save().then(profile => res.json(profile));
       })
       .catch(err => res.json(err));
   }
