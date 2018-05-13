@@ -2,22 +2,46 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { addExperience } from "../../redux/actions/profileActions";
+import {
+  addExperience,
+  getCurrentProfile,
+  editExperience
+} from "../../redux/actions/profileActions";
+import { updateExpForm } from "../../utils/updateFormState";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 
-class AddExperience extends Component {
+class AddEditExperience extends Component {
   static propTypes = {
     addExperience: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    editExperience: PropTypes.func.isRequired,
+    getCurrentProfile: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
+    profile: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
   };
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (prevState.errors !== nextProps.errors) {
       return { errors: nextProps.errors };
     }
+    const editExpRoute = nextProps.match.path !== "/add-experience";
+    const { profile } = nextProps.profile;
+    if (editExpRoute && profile !== null && prevState.company === "") {
+      const { experience } = profile;
+      const { _id } = nextProps.match.params;
+      return updateExpForm(experience, _id);
+    }
     return null;
   };
+
+  componentDidMount() {
+    const editExpRoute = this.props.match.path !== "/add-experience";
+    if (editExpRoute) {
+      this.props.getCurrentProfile();
+    }
+  }
 
   state = {
     company: "",
@@ -44,8 +68,14 @@ class AddExperience extends Component {
       description: this.state.description
     };
 
-    // call redux action
-    this.props.addExperience(experienceData, this.props.history);
+    if (this.props.history.location.pathname !== "/add-experience") {
+      const { _id } = this.props.match.params;
+      // call redux action
+      this.props.editExperience(experienceData, _id, this.props.history);
+    } else {
+      // call redux action
+      this.props.addExperience(experienceData, this.props.history);
+    }
   };
 
   onChange = e => {
@@ -69,9 +99,11 @@ class AddExperience extends Component {
       from,
       to,
       current,
-      description
+      description,
+      originalFrom,
+      originalTo
     } = this.state;
-
+    const { match } = this.props;
     return (
       <div className="add-experience">
         <div className="container">
@@ -80,12 +112,20 @@ class AddExperience extends Component {
               <Link to="/dashboard" className="btn btn-light">
                 Go Back
               </Link>
-              <h1 className="display-4 text-center">Add Experience</h1>
-              <p className="lead text-center">
-                Add any job or position that you have had in the past or current
-              </p>
+              {match.path === "/add-experience" && (
+                <React.Fragment>
+                  <h1 className="display-4 text-center">Add Experience</h1>
+                  <p className="lead text-center">
+                    Add any job or position that you have had in the past or
+                    current
+                  </p>
+                </React.Fragment>
+              )}
+              {!(match.path === "/add-experience") && (
+                <h1 className="display-4 text-center">Edit Experience</h1>
+              )}
               <small className="d-block pb-3">* = required fields</small>
-              <form onSubmit={this.onSubmit}>
+              <form noValidate onSubmit={this.onSubmit}>
                 <TextFieldGroup
                   placeholder="* Company"
                   name="company"
@@ -114,6 +154,12 @@ class AddExperience extends Component {
                   value={from}
                   onChange={this.onChange}
                   error={errors.from}
+                  // hack: this displays only when user is editing.
+                  // i.e. when route => /:exp.id
+                  // never displays on /add-experience route.
+                  // having problems with moment, so this little hack
+                  // helps users with the dates
+                  smallInfo={originalFrom}
                 />
                 <h6>To Date</h6>
                 <TextFieldGroup
@@ -123,6 +169,12 @@ class AddExperience extends Component {
                   onChange={this.onChange}
                   error={errors.to}
                   disabled={disabled ? "disabled" : ""}
+                  // hack: this displays only when user is editing.
+                  // i.e. when route => /:exp.id
+                  // never displays on /add-experience route.
+                  // having problems with moment, so this little hack
+                  // helps users with the dates
+                  smallInfo={originalTo}
                 />
                 <div className="form-check mb-4">
                   <input
@@ -161,9 +213,12 @@ class AddExperience extends Component {
 }
 
 const mapStateToProps = state => ({
+  profile: state.profile,
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { addExperience })(
-  withRouter(AddExperience)
-);
+export default connect(mapStateToProps, {
+  addExperience,
+  getCurrentProfile,
+  editExperience
+})(withRouter(AddEditExperience));
