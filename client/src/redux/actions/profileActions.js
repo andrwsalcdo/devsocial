@@ -50,11 +50,10 @@ export const addExperience = (experienceData, history) => dispatch => {
     .then(res => history.push("/dashboard"))
     .catch(err => dispatch(getErrors(err)));
 };
-
-// add Experience
-export const addEducation = (educationData, history) => dispatch => {
+// edit experience
+export const editExperience = (experienceData, id, history) => dispatch => {
   axios
-    .post("/api/profile/education", educationData)
+    .patch(`/api/profile/experience/${id}`, experienceData)
     .then(res => history.push("/dashboard"))
     .catch(err => dispatch(getErrors(err)));
 };
@@ -63,6 +62,14 @@ export const deleteExperience = id => dispatch => {
   axios
     .delete(`/api/profile/experience/${id}`)
     .then(res => dispatch(getProfile(res.data)))
+    .catch(err => dispatch(getErrors(err)));
+};
+
+// add Education
+export const addEducation = (educationData, history) => dispatch => {
+  axios
+    .post("/api/profile/education", educationData)
+    .then(res => history.push("/dashboard"))
     .catch(err => dispatch(getErrors(err)));
 };
 
