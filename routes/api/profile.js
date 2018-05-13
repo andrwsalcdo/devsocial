@@ -212,28 +212,34 @@ router.patch(
     if (!isValid) {
       return res.status(400).json(errors);
     }
+    // updated experience object
+    const updateExp = {
+      _id: req.params.exp_id,
+      title: req.body.title,
+      company: req.body.company,
+      location: req.body.location,
+      from: req.body.from,
+      to: req.body.to,
+      current: req.body.current,
+      description: req.body.description
+    };
 
-    Profile.findOne({ user: req.user.id })
-      .then(profile => {
-        const expId = req.params.exp_id;
-        const updateExp = {
-          _id: req.params.exp_id,
-          title: req.body.title,
-          company: req.body.company,
-          location: req.body.location,
-          from: req.body.from,
-          to: req.body.to,
-          current: req.body.current,
-          description: req.body.description
-        };
-        // get the experience by index
-        const expIndex = profile.experience.map(exp => exp.id).indexOf(expId);
-
-        profile.experience[expIndex] = updateExp;
-
-        profile.save().then(profile => res.json(profile));
+    Profile.update(
+      {
+        user: req.user.id,
+        "experience._id": req.params.exp_id
+      },
+      {
+        $set: {
+          "experience.$": updateExp
+        }
+      },
+      { new: true }
+    )
+      .then(() => {
+        res.json({ success: true });
       })
-      .catch(err => res.json({ error: "There was an error" }));
+      .catch(err => res.status(400).json({ err: err }));
   }
 );
 
