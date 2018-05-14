@@ -58,7 +58,6 @@ export const updateExpForm = (experience, id) => {
   // find the experience in the array via id
   const [exp] = experience.filter(ex => ex._id === id);
 
-  // if (exp.length > 0 || exp !== undefined) {
   const from = moment(exp.from, ["yyyy-MM-dd", moment.HTML5_FMT.DATE]);
   const to = moment(exp.to, ["yyyy-MM-dd", moment.HTML5_FMT.DATE]);
 
@@ -81,5 +80,33 @@ export const updateExpForm = (experience, id) => {
     // with the dates, just in case they forget.
     originalFrom: exp.from,
     originalTo: exp.to
+  };
+};
+
+export const updateEduForm = (education, id) => {
+  // find the education object in the array via id
+  const [edu] = education.filter(ed => ed._id === id);
+
+  const from = moment(edu.from, ["yyyy-MM-dd", moment.HTML5_FMT.DATE]);
+  const to = moment(edu.to, ["yyyy-MM-dd", moment.HTML5_FMT.DATE]);
+
+  // // if education form field doesn't exists, use empty string
+  edu.from = !isEmpty(edu.from) ? from._d.toDateString() : "";
+  edu.to = !isEmpty(edu.to) ? to._d.toDateString() : "";
+  edu.current = edu.current === true ? edu.current : (edu.current = false);
+  edu.description = !isEmpty(edu.description) ? edu.description : "";
+
+  return {
+    school: edu.school,
+    degree: edu.degree,
+    fieldofstudy: edu.fieldofstudy,
+    from: edu.from,
+    to: edu.to,
+    current: edu.current,
+    description: edu.description,
+    // hack: having problems with moment. this helps the user
+    // with the dates, just in case they forget.
+    originalFrom: edu.from,
+    originalTo: edu.to
   };
 };
