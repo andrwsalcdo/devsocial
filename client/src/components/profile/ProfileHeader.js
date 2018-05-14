@@ -9,7 +9,7 @@ const ProfileHeader = ({ profile }) => (
         <div className="row">
           <div className="col-4 col-md-3 m-auto">
             <img
-              src={profile.user.avatar}
+              src={profile.user.avatar.toString()}
               alt={`${profile.user.name}`}
               className="rounded-circle"
             />
@@ -32,7 +32,7 @@ const ProfileHeader = ({ profile }) => (
                 <i className="fas fa-globe fa-2x" />
               </a>
             )}
-            {isEmpty(profile.social && profile.social.twitter) && (
+            {!isEmpty(profile.social && profile.social.twitter) && (
               <a
                 className="text-white p-2"
                 href={profile.social.twitter}
@@ -41,7 +41,7 @@ const ProfileHeader = ({ profile }) => (
                 <i className="fas fa-twitter fa-2x" />
               </a>
             )}
-            {isEmpty(profile.social && profile.social.facebook) && (
+            {!isEmpty(profile.social && profile.social.facebook) && (
               <a
                 className="text-white p-2"
                 href={profile.social.facebook}
@@ -50,7 +50,7 @@ const ProfileHeader = ({ profile }) => (
                 <i className="fas fa-facebook fa-2x" />
               </a>
             )}
-            {isEmpty(profile.social && profile.social.linkedin) && (
+            {!isEmpty(profile.social && profile.social.linkedin) && (
               <a
                 className="text-white p-2"
                 href={profile.social.linkedin}
@@ -59,7 +59,7 @@ const ProfileHeader = ({ profile }) => (
                 <i className="fas fa-linkedin fa-2x" />
               </a>
             )}
-            {isEmpty(profile.social && profile.social.youtube) && (
+            {!isEmpty(profile.social && profile.social.youtube) && (
               <a
                 className="text-white p-2"
                 href={profile.social.youtube}
@@ -68,7 +68,7 @@ const ProfileHeader = ({ profile }) => (
                 <i className="fas fa-youtube fa-2x" />
               </a>
             )}
-            {isEmpty(profile.social && profile.social.instagram) && (
+            {!isEmpty(profile.social && profile.social.instagram) && (
               <a
                 className="text-white p-2"
                 href={profile.social.instagram}
