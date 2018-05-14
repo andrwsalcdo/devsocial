@@ -2,7 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import isEmpty from "../../utils/isEmpty";
 
-const firstName = names => names.trim().split(" ")[0];
+const firstName = names => {
+  const firstName = names.trim().split(" ")[0];
+  return capitalize(firstName);
+};
+
+const capitalize = name => name[0].toUpperCase() + name.slice(1);
 
 const ProfileAbout = ({ profile }) => (
   <div className="row">
