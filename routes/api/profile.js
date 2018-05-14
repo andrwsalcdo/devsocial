@@ -296,6 +296,51 @@ router.post(
 );
 
 /*
+    @route  PATCH api/profile/education/:edu_id
+    @desc   Edit Education in Profile
+    @access Private
+*/
+router.patch(
+  "/education/:edu_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateEducationInput(req.body);
+    //  check validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+    // updated education object
+    const updateEdu = {
+      _id: req.params.edu_id,
+      school: req.body.school,
+      degree: req.body.degree,
+      fieldofstudy: req.body.fieldofstudy,
+      from: req.body.from,
+      to: req.body.to,
+      current: req.body.current,
+      description: req.body.description
+    };
+
+    Profile.update(
+      {
+        user: req.user.id,
+        "education._id": req.params.edu_id
+      },
+      {
+        $set: {
+          "education.$": updateEdu
+        }
+      },
+      { new: true }
+    )
+      .then(() => {
+        res.json({ success: true });
+      })
+      .catch(err => res.status(400).json({ err: err }));
+  }
+);
+
+/*
     @route  DELETE api/profile/education/:edu_id
     @desc   Delete education from profile
     @access Private
