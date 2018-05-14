@@ -126,6 +126,7 @@ class AddEditExperience extends Component {
               )}
               <small className="d-block pb-3">* = required fields</small>
               <form noValidate onSubmit={this.onSubmit}>
+                {!(match.path === "/add-experience") && <h6>Company</h6>}
                 <TextFieldGroup
                   placeholder="* Company"
                   name="company"
@@ -133,6 +134,7 @@ class AddEditExperience extends Component {
                   onChange={this.onChange}
                   error={errors.company}
                 />
+                {!(match.path === "/add-experience") && <h6>Job Title</h6>}
                 <TextFieldGroup
                   placeholder="* Job Title"
                   name="title"
@@ -140,6 +142,7 @@ class AddEditExperience extends Component {
                   onChange={this.onChange}
                   error={errors.title}
                 />
+                {!(match.path === "/add-experience") && <h6>Location</h6>}
                 <TextFieldGroup
                   placeholder="Location"
                   name="location"
