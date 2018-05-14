@@ -72,7 +72,13 @@ export const addEducation = (educationData, history) => dispatch => {
     .then(res => history.push("/dashboard"))
     .catch(err => dispatch(getErrors(err)));
 };
-
+// edit Education
+export const editEducation = (educationData, id, history) => dispatch => {
+  axios
+    .patch(`/api/profile/education/${id}`, educationData)
+    .then(res => history.push("/dashboard"))
+    .catch(err => dispatch(getErrors(err)));
+};
 // delete education
 export const deleteEducation = id => dispatch => {
   axios
