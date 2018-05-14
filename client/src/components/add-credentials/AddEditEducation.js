@@ -2,22 +2,47 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import {
+  addEducation,
+  getCurrentProfile,
+  editEducation
+} from "../../redux/actions/profileActions";
+import { updateEduForm } from "../../utils/updateFormState";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
-import { addEducation } from "../../redux/actions/profileActions";
 
-class AddEducation extends Component {
+class AddEditEducation extends Component {
   static propTypes = {
     addEducation: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    getCurrentProfile: PropTypes.func.isRequired,
+    editEducation: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
+    profile: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
   };
 
   static getDerivedStateFromProps = (nextProps, prevState) => {
     if (prevState.errors !== nextProps.errors) {
       return { errors: nextProps.errors };
     }
+    const editEduRoute = nextProps.match.path !== "/add-education";
+    const { profile } = nextProps.profile;
+    if (editEduRoute && profile !== null && prevState.school === "") {
+      const { education } = profile;
+      const { _id } = nextProps.match.params;
+      console.log("dervied");
+      return updateEduForm(education, _id);
+    }
     return null;
   };
+
+  componentDidMount() {
+    const editEduRoute = this.props.match.path !== "/add-education";
+    if (editEduRoute) {
+      this.props.getCurrentProfile();
+    }
+  }
 
   state = {
     school: "",
@@ -43,8 +68,14 @@ class AddEducation extends Component {
       current: this.state.current,
       description: this.state.description
     };
-    // call redux action
-    this.props.addEducation(educationData, this.props.history);
+    if (this.props.match.path !== "/add-education") {
+      const { _id } = this.props.match.params;
+      // call redux action
+      this.props.editEducation(educationData, _id, this.props.history);
+    } else {
+      // call redux action
+      this.props.addEducation(educationData, this.props.history);
+    }
   };
 
   onChange = e => {
@@ -68,9 +99,16 @@ class AddEducation extends Component {
       from,
       to,
       current,
-      description
+      description,
+      // hack: this displays only when user is editing.
+      // i.e. when route => /:edu.id
+      // never displays on /add-education route.
+      // having problems with moment, so this little hack
+      // helps users with the dates
+      originalFrom,
+      originalTo
     } = this.state;
-
+    const { match } = this.props;
     return (
       <div className="add-education">
         <div className="container">
@@ -79,12 +117,22 @@ class AddEducation extends Component {
               <Link to="/dashboard" className="btn btn-light">
                 Go Back
               </Link>
-              <h1 className="display-4 text-center">Add Education</h1>
-              <p className="lead text-center">
-                Add any school, bootcamp, etc that you have attended
-              </p>
+              {match.path === "/add-education" && (
+                <React.Fragment>
+                  <h1 className="display-4 text-center">Add Education</h1>
+                  <p className="lead text-center">
+                    Add any school, bootcamp, etc that you have attended
+                  </p>
+                </React.Fragment>
+              )}
+              {!(match.path === "/add-education") && (
+                <React.Fragment>
+                  <h1 className="display-4 text-center">Edit Education</h1>
+                </React.Fragment>
+              )}
               <small className="d-block pb-3">* = required fields</small>
               <form onSubmit={this.onSubmit}>
+                {!(match.path === "/add-education") && <h6>School</h6>}
                 <TextFieldGroup
                   placeholder="* School"
                   name="school"
@@ -92,6 +140,7 @@ class AddEducation extends Component {
                   onChange={this.onChange}
                   error={errors.school}
                 />
+                {!(match.path === "/add-education") && <h6>Degree</h6>}
                 <TextFieldGroup
                   placeholder="* Degree or Certification"
                   name="degree"
@@ -99,6 +148,7 @@ class AddEducation extends Component {
                   onChange={this.onChange}
                   error={errors.degree}
                 />
+                {!(match.path === "/add-education") && <h6>Field of Study</h6>}
                 <TextFieldGroup
                   placeholder="* Field of Study"
                   name="fieldofstudy"
@@ -113,6 +163,7 @@ class AddEducation extends Component {
                   value={from}
                   onChange={this.onChange}
                   error={errors.from}
+                  smallInfo={originalFrom}
                 />
                 <h6>To Date</h6>
                 <TextFieldGroup
@@ -122,6 +173,7 @@ class AddEducation extends Component {
                   onChange={this.onChange}
                   error={errors.to}
                   disabled={disabled ? "disabled" : ""}
+                  smallInfo={originalTo}
                 />
                 <div className="form-check mb-4">
                   <input
@@ -164,6 +216,8 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { addEducation })(
-  withRouter(AddEducation)
-);
+export default connect(mapStateToProps, {
+  addEducation,
+  getCurrentProfile,
+  editEducation
+})(withRouter(AddEditEducation));
