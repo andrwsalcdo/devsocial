@@ -1,14 +1,33 @@
 import axios from "axios";
 import {
   GET_PROFILE,
-  //   GET_PROFILES,
   PROFILE_LOADING,
   //   PROFILE_NOT_FOUND,
-  CLEAR_CURRENT_PROFILE
+  CLEAR_CURRENT_PROFILE,
+  GET_PROFILES
   // SET_CURRENT_USER
 } from "./actionTypes";
 import { getErrors } from "./errorsActions";
 import { setCurrentUser } from "./authActions";
+
+// profile loading
+export const setProfileLoading = () => ({
+  type: PROFILE_LOADING
+});
+// get profile
+export const getProfile = profileData => ({
+  type: GET_PROFILE,
+  payload: profileData
+});
+// get all profiles
+export const getAllProfiles = profiles => ({
+  type: GET_PROFILES,
+  payload: profiles
+});
+// clear current profile
+export const clearCurrentProfile = () => ({
+  type: CLEAR_CURRENT_PROFILE
+});
 
 // get current profile
 export const getCurrentProfile = () => dispatch => {
@@ -19,6 +38,15 @@ export const getCurrentProfile = () => dispatch => {
     .catch(err => dispatch(getProfile({})));
 };
 
+// get all profiles
+export const getProfiles = () => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .get("/api/profile/all")
+    .then(res => dispatch(getAllProfiles(res.data)))
+    .catch(err => dispatch(getAllProfiles({})));
+};
+
 // Create Profile
 export const createProfile = (profileData, history) => dispatch => {
   axios
@@ -26,22 +54,6 @@ export const createProfile = (profileData, history) => dispatch => {
     .then(res => history.push("/dashboard"))
     .catch(err => dispatch(getErrors(err)));
 };
-
-// profile loading
-export const setProfileLoading = () => ({
-  type: PROFILE_LOADING
-});
-
-// get profile
-export const getProfile = profileData => ({
-  type: GET_PROFILE,
-  payload: profileData
-});
-
-// clear current profile
-export const clearCurrentProfile = () => ({
-  type: CLEAR_CURRENT_PROFILE
-});
 
 // add Experience
 export const addExperience = (experienceData, history) => dispatch => {
