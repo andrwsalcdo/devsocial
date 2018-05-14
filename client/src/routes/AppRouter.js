@@ -11,7 +11,7 @@ import Login from "../components/auth/Login";
 import Dashboard from "../components/dashboard/Dashboard";
 import CreateEditProfile from "../components/create-edit-profile/CreateEditProfile";
 import AddEditExperience from "../components/add-credentials/AddEditExperience";
-import AddEducation from "../components/add-credentials/AddEducation";
+import AddEditEducation from "../components/add-credentials/AddEditEducation";
 
 import "../App.css";
 
@@ -45,7 +45,16 @@ const AppRouter = () => (
             path="/experience/:_id"
             component={AddEditExperience}
           />
-          <PrivateRoute exact path="/add-education" component={AddEducation} />
+          <PrivateRoute
+            exact
+            path="/add-education"
+            component={AddEditEducation}
+          />
+          <PrivateRoute
+            exact
+            path="/education/:_id"
+            component={AddEditEducation}
+          />
         </Switch>
       </div>
     </Wrapper>
