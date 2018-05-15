@@ -19,11 +19,11 @@ const ProfileHeader = ({ profile }) => (
           <h1 className="display-4 text-center">{profile.user.name}</h1>
           <p className="lead text-center">
             {profile.status}
-            {isEmpty(profile.company) && <span>at {profile.company}</span>}
+            {!isEmpty(profile.company) && <span>at {profile.company}</span>}
           </p>
-          {isEmpty(profile.location) && <span>at {profile.location}</span>}
+          {!isEmpty(profile.location) && <span>at {profile.location}</span>}
           <p>
-            {isEmpty(profile.website) && (
+            {!isEmpty(profile.website) && (
               <a
                 className="text-white p-2"
                 href={profile.website}
