@@ -9,6 +9,8 @@ import Footer from "../components/layout/Footer";
 import Register from "../components/auth/Register";
 import Login from "../components/auth/Login";
 import Profiles from "../components/profiles/Profiles";
+import Profile from "../components/profile/Profile";
+import NotFound from "../components/not-found/NotFound";
 import Dashboard from "../components/dashboard/Dashboard";
 import CreateEditProfile from "../components/create-edit-profile/CreateEditProfile";
 import AddEditExperience from "../components/add-credentials/AddEditExperience";
@@ -25,6 +27,8 @@ const AppRouter = () => (
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/profiles" component={Profiles} />
+        <Route exact path="/profile/:handle" component={Profile} />
+        <Route exact path="/not-found" component={NotFound} />
         <Switch>
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
           <PrivateRoute
