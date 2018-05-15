@@ -38,7 +38,7 @@ const ProfileHeader = ({ profile }) => (
                 href={profile.social.twitter}
                 target="_blank"
               >
-                <i className="fas fa-twitter fa-2x" />
+                <i className="fab fa-twitter fa-2x" />
               </a>
             )}
             {!isEmpty(profile.social && profile.social.facebook) && (
@@ -47,7 +47,7 @@ const ProfileHeader = ({ profile }) => (
                 href={profile.social.facebook}
                 target="_blank"
               >
-                <i className="fas fa-facebook fa-2x" />
+                <i className="fab fa-facebook fa-2x" />
               </a>
             )}
             {!isEmpty(profile.social && profile.social.linkedin) && (
@@ -56,7 +56,7 @@ const ProfileHeader = ({ profile }) => (
                 href={profile.social.linkedin}
                 target="_blank"
               >
-                <i className="fas fa-linkedin fa-2x" />
+                <i className="fab fa-linkedin fa-2x" />
               </a>
             )}
             {!isEmpty(profile.social && profile.social.youtube) && (
@@ -65,7 +65,7 @@ const ProfileHeader = ({ profile }) => (
                 href={profile.social.youtube}
                 target="_blank"
               >
-                <i className="fas fa-youtube fa-2x" />
+                <i className="fab fa-youtube fa-2x" />
               </a>
             )}
             {!isEmpty(profile.social && profile.social.instagram) && (
@@ -74,7 +74,7 @@ const ProfileHeader = ({ profile }) => (
                 href={profile.social.instagram}
                 target="_blank"
               >
-                <i className="fas fa-instagram fa-2x" />
+                <i className="fab fa-instagram fa-2x" />
               </a>
             )}
           </p>
