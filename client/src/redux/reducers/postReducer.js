@@ -1,4 +1,4 @@
-import { ADD_POST } from "../actions/actionTypes";
+import { ADD_POST, POST_LOADING, GET_POSTS } from "../actions/actionTypes";
 
 const initialState = {
   posts: [],
@@ -8,6 +8,17 @@ const initialState = {
 
 function postReducer(state = initialState, action) {
   switch (action.type) {
+    case POST_LOADING:
+      return {
+        ...state,
+        loading: true
+      };
+    case GET_POSTS:
+      return {
+        ...state,
+        posts: action.payload,
+        loading: false
+      };
     case ADD_POST:
       return {
         ...state,
