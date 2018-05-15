@@ -31,7 +31,6 @@ class AddEditEducation extends Component {
     if (editEduRoute && profile !== null && prevState.school === "") {
       const { education } = profile;
       const { _id } = nextProps.match.params;
-      console.log("dervied");
       return updateEduForm(education, _id);
     }
     return null;
