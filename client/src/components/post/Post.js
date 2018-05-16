@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { getPost } from "../../redux/actions/postActions";
 import Spinner from "../common/spinner/Spinner";
 import PostItem from "../posts/PostItem";
+import TextForm from "../posts/TextForm";
+import CommentItem from "./commentItem";
 
 class Post extends Component {
   static propTypes = {
@@ -30,7 +32,18 @@ class Post extends Component {
               {post === null || loading || Object.keys(post).length === 0 ? (
                 <Spinner />
               ) : (
-                <PostItem post={post} showActions={false} />
+                <React.Fragment>
+                  <PostItem post={post} showActions={false} />
+                  <TextForm postId={post._id} />
+                  {post.comments.length > 0 &&
+                    post.comments.map(comment => (
+                      <CommentItem
+                        key={comment._id}
+                        comment={comment}
+                        postId={post._id}
+                      />
+                    ))}
+                </React.Fragment>
               )}
             </div>
           </div>
