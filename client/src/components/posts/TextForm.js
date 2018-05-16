@@ -2,11 +2,14 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addPost } from "../../redux/actions/postActions";
+import { addComment } from "../../redux/actions/postActions";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 
-class PostForm extends Component {
+class TextForm extends Component {
   static propTypes = {
     addPost: PropTypes.func.isRequired,
+    addComment: PropTypes.func.isRequired,
+    postId: PropTypes.string,
     auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
   };
@@ -29,13 +32,18 @@ class PostForm extends Component {
   onSubmit = e => {
     e.preventDefault();
     const { user } = this.props.auth;
-    const newPost = {
+    const newText = {
       text: this.state.text,
       name: user.name,
       avatar: user.avatar
     };
-    // call redux aciton
-    this.props.addPost(newPost);
+    if (this.props.postId) {
+      // call redux action
+      this.props.addComment(this.props.postId, newText);
+    } else {
+      // call redux aciton
+      this.props.addPost(newText);
+    }
     // clear text area
     this.setState({ text: "" });
   };
@@ -46,13 +54,15 @@ class PostForm extends Component {
       <div className="post-form mb-3">
         <div className="card card-info">
           <div className="card-header bg-info text-white">
-            Say Something...{" "}
+            {this.props.postId ? "Make a Comment" : "Say Something..."}
           </div>
           <div className="card-body">
             <form noValidate onSubmit={this.onSubmit}>
               <div className="form-group">
                 <TextAreaFieldGroup
-                  placeholder="Create a Post"
+                  placeholder={
+                    this.props.postId ? "Reply to Post" : "Create a Post"
+                  }
                   name="text"
                   value={text}
                   onChange={this.onChange}
@@ -75,4 +85,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { addPost })(PostForm);
+export default connect(mapStateToProps, { addPost, addComment })(TextForm);

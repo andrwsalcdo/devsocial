@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getAllPosts } from "../../redux/actions/postActions";
-import PostForm from "./PostForm";
+import TextForm from "./TextForm";
 import Spinner from "../common/spinner/Spinner";
 import PostItem from "./PostItem";
 
@@ -21,7 +21,7 @@ class Posts extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <PostForm />
+              <TextForm />
               {posts === null || loading ? (
                 <Spinner />
               ) : (
