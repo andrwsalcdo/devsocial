@@ -1,5 +1,11 @@
 import axios from "axios";
-import { ADD_POST, POST_LOADING, GET_POSTS, DELETE_POST } from "./actionTypes";
+import {
+  ADD_POST,
+  POST_LOADING,
+  GET_POSTS,
+  DELETE_POST,
+  GET_POST
+} from "./actionTypes";
 import { getErrors } from "./errorsActions";
 
 const _addPost = postData => ({
@@ -9,6 +15,11 @@ const _addPost = postData => ({
 
 const _getPosts = data => ({
   type: GET_POSTS,
+  payload: data
+});
+
+const _getPost = data => ({
+  type: GET_POST,
   payload: data
 });
 
@@ -37,6 +48,14 @@ export const getAllPosts = () => dispatch => {
     .then(res => dispatch(_getPosts(res.data)))
     .catch(err => dispatch(_getPosts(null)));
 };
+// get post by id
+export const getPost = id => dispatch => {
+  axios
+    .get(`/api/posts/${id}`)
+    .then(res => dispatch(_getPost(res.data)))
+    .catch(err => dispatch(_getPost(null)));
+};
+
 // delete post by id
 export const deletePost = id => dispatch => {
   axios
