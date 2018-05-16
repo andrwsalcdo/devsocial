@@ -14,7 +14,11 @@ class PostItem extends Component {
     auth: PropTypes.object.isRequired,
     deletePost: PropTypes.func.isRequired,
     addLike: PropTypes.func.isRequired,
-    removeLike: PropTypes.func.isRequired
+    removeLike: PropTypes.func.isRequired,
+    showActions: PropTypes.bool
+  };
+  static defaultProps = {
+    showActions: true
   };
   handleDeletePost = id => {
     this.props.deletePost(id);
@@ -34,7 +38,7 @@ class PostItem extends Component {
     return false;
   };
   render() {
-    const { post, auth } = this.props;
+    const { post, auth, showActions } = this.props;
     return (
       <div className="card card-body mb-3">
         <div className="row">
@@ -51,41 +55,43 @@ class PostItem extends Component {
           </div>
           <div className="col-md-10">
             <p className="lead">{post.text}</p>
-            <span>
-              <button
-                onClick={() => this.handleLikePost(post._id)}
-                type="button"
-                className="btn btn-light mr-1"
-              >
-                <i
-                  className={
-                    this.handleFindUserLike(post.likes)
-                      ? "fas fa-thumbs-up text-info"
-                      : "fas fa-thumbs-up text-secondary"
-                  }
-                />
-                <span className="badge badge-light">{post.likes.length}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => this.handleUnlikePost(post._id)}
-                className="btn btn-light mr-1"
-              >
-                <i className="text-secondary fas fa-thumbs-down" />
-              </button>
-              <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
-                Comments
-              </Link>
-              {post.user === auth.user.id && (
+            {showActions && (
+              <span>
                 <button
-                  onClick={() => this.handleDeletePost(post._id)}
+                  onClick={() => this.handleLikePost(post._id)}
                   type="button"
-                  className="btn btn-danger mr-1"
+                  className="btn btn-light mr-1"
                 >
-                  <i className="fas fa-times" />
+                  <i
+                    className={
+                      this.handleFindUserLike(post.likes)
+                        ? "fas fa-thumbs-up text-info"
+                        : "fas fa-thumbs-up text-secondary"
+                    }
+                  />
+                  <span className="badge badge-light">{post.likes.length}</span>
                 </button>
-              )}
-            </span>
+                <button
+                  type="button"
+                  onClick={() => this.handleUnlikePost(post._id)}
+                  className="btn btn-light mr-1"
+                >
+                  <i className="text-secondary fas fa-thumbs-down" />
+                </button>
+                <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
+                  Comments
+                </Link>
+                {post.user === auth.user.id && (
+                  <button
+                    onClick={() => this.handleDeletePost(post._id)}
+                    type="button"
+                    className="btn btn-danger mr-1"
+                  >
+                    <i className="fas fa-times" />
+                  </button>
+                )}
+              </span>
+            )}
           </div>
         </div>
       </div>
