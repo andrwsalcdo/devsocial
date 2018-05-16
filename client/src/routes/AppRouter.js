@@ -16,6 +16,7 @@ import CreateEditProfile from "../components/create-edit-profile/CreateEditProfi
 import AddEditExperience from "../components/add-credentials/AddEditExperience";
 import AddEditEducation from "../components/add-credentials/AddEditEducation";
 import Posts from "../components/posts/Posts";
+import Post from "../components/post/Post";
 
 import "../App.css";
 
@@ -63,6 +64,7 @@ const AppRouter = () => (
             component={AddEditEducation}
           />
           <PrivateRoute exact path="/feed" component={Posts} />
+          <PrivateRoute exact path="/post/:id" component={Post} />
         </Switch>
       </div>
     </Wrapper>
