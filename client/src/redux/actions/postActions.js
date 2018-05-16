@@ -87,3 +87,11 @@ export const addComment = (postId, commentData) => dispatch => {
     .then(res => dispatch(_getPost(res.data)))
     .catch(err => dispatch(getErrors(err)));
 };
+
+// delete comment by id
+export const deleteComment = (postId, commentId) => dispatch => {
+  axios
+    .delete(`/api/posts/comment/${postId}/${commentId}`)
+    .then(res => dispatch(_getPost(res.data)))
+    .catch(err => dispatch(getErrors(err)));
+};
