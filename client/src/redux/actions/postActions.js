@@ -79,3 +79,11 @@ export const removeLike = id => dispatch => {
     .then(res => dispatch(getAllPosts()))
     .catch(err => dispatch(getErrors(err)));
 };
+
+// Add Comment
+export const addComment = (postId, commentData) => dispatch => {
+  axios
+    .post(`/api/posts/comment/${postId}`, commentData)
+    .then(res => dispatch(_getPost(res.data)))
+    .catch(err => dispatch(getErrors(err)));
+};
